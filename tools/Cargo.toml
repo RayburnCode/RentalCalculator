@@ -1,0 +1,13 @@
+[package]
+name = "tools"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+api = { path = "../api" }
+tokio = { workspace = true }
+dotenv = "0.15"
+
+[[bin]]
+name = "test_postgres"
+path = "src/test_postgres.rs"

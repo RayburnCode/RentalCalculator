@@ -1,5 +1,5 @@
+use crate::common::*;
 use crate::Route;
-use dioxus::prelude::*;
 
 #[component]
 pub fn Navbar() -> Element {
@@ -25,7 +25,6 @@ pub fn Navbar() -> Element {
                         NavLink { to: Route::Home {}, "Home" }
                         NavLink { to: Route::Dashboard {}, "Dashboard" }
                         NavLink { to: Route::TestingServer {}, "Testing Server" }
-                    
                     }
 
                     // Mobile Menu Button (Right side)

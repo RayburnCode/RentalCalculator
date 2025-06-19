@@ -1,7 +1,9 @@
 
-use dioxus::prelude::*;
+mod common;
+use common::*;
+use dioxus_desktop::Config;
 
-use views::{Home, AppLayout,NotFound, TestingServer };
+use views::{Home, AppLayout, NotFound, TestingServer};
 use views::dashboard::{Dashboard, PropertyProfile, AddProperty};
 use views::analysis::{Calculator, Comparison, Expenses, CashFlow};
 use views::learn::{Guides, Glossary};
@@ -96,18 +98,18 @@ const FAVICON: Asset = asset!("/assets/favicon.ico");
 const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
 
 fn main() {
-
-
     // Set the url of the server where server functions are hosted.
     #[cfg(not(feature = "server"))]
     dioxus::fullstack::prelude::server_fn::client::set_server_url("http://127.0.0.1:8083");
-    dioxus::launch(App);
+    
+    // Launch the desktop app with configuration
+    dioxus::launch(app);
 }
 
 
 
 #[component]
-fn App() -> Element {
+fn app() -> Element {
     rsx! {
         document::Link { rel: "icon", href: FAVICON }
         document::Link { rel: "stylesheet", href: TAILWIND_CSS }

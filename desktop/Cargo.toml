@@ -4,16 +4,13 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-dioxus.workspace = true
-api = { path = "../api" }  # Use actual features needed
-serde.workspace = true
-
-# Add any desktop-specific dependencies here
-dioxus-desktop = { version = "0.6.3" }  # Add if needed
+api = { path = "../api" }
+dioxus = "0.6.3"
+dioxus-desktop = "0.6.3"
+dioxus-signals = "0.6.3"
+dioxus-router = "0.6.3"
+chrono = "0.4.41"
 
 [features]
-default = ["desktop"]  # Default to desktop features
-desktop = [
-    "dioxus/desktop",
-    # Add any desktop-specific feature dependencies
-]
+default = []
+server = []

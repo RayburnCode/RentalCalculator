@@ -1,4 +1,4 @@
-use dioxus::prelude::*;
+use crate::common::*;
 
 #[component]
 pub fn NotFound(route: Vec<String>) -> Element {

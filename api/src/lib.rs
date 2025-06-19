@@ -9,4 +9,5 @@ pub async fn echo(input: String) -> Result<String, ServerFnError> {
 
 
 pub mod auth;
+pub mod db_connection;
 

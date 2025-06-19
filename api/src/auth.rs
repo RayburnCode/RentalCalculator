@@ -1,20 +1,10 @@
 use async_trait::async_trait;
-use axum::{
-    http::Method,
-    response::{IntoResponse, Response},
-    routing::get,
-    Router,
-};
-use axum_session::{SessionConfig, SessionLayer, SessionStore};
-use axum_session_auth::*;
-use axum_session_sqlx::SessionSqlitePool;
-use core::pin::Pin;
-use dioxus_fullstack::prelude::*;
+use dioxus::prelude::*;
 use serde::{Deserialize, Serialize};
-use sqlx::sqlite::{SqliteConnectOptions, SqlitePool, SqlitePoolOptions};
-use std::error::Error;
-use std::future::Future;
-use std::{collections::HashSet, net::SocketAddr, str::FromStr};
+use sqlx::postgres::{PgPool, PgPoolOptions};
+use axum_session_sqlx::SessionPgPool;
+use axum_session_auth::*;
+use std::{collections::HashSet};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct User {
@@ -22,7 +12,7 @@ pub struct User {
     pub anonymous: bool,
     pub username: String,
     pub permissions: HashSet<String>,
-}
+} 
 
 #[derive(sqlx::FromRow, Clone)]
 pub struct SqlPermissionTokens {
@@ -45,8 +35,8 @@ impl Default for User {
 }
 
 #[async_trait]
-impl Authentication<User, i64, SqlitePool> for User {
-    async fn load_user(userid: i64, pool: Option<&SqlitePool>) -> Result<User, anyhow::Error> {
+impl Authentication<User, i64, PgPool> for User {
+    async fn load_user(userid: i64, pool: Option<&PgPool>) -> Result<User, anyhow::Error> {
         let pool = pool.unwrap();
 
         User::get_user(userid, pool)
@@ -68,14 +58,14 @@ impl Authentication<User, i64, SqlitePool> for User {
 }
 
 #[async_trait]
-impl HasPermission<SqlitePool> for User {
-    async fn has(&self, perm: &str, _pool: &Option<&SqlitePool>) -> bool {
+impl HasPermission<PgPool> for User {
+    async fn has(&self, perm: &str, _pool: &Option<&PgPool>) -> bool {
         self.permissions.contains(perm)
     }
 }
 
 impl User {
-    pub async fn get_user(id: i64, pool: &SqlitePool) -> Option<Self> {
+    pub async fn get_user(id: i64, pool: &PgPool) -> Option<Self> {
         let sqluser = sqlx::query_as::<_, SqlUser>("SELECT * FROM users WHERE id = $1")
             .bind(id)
             .fetch_one(pool)
@@ -94,11 +84,11 @@ impl User {
         Some(sqluser.into_user(Some(sql_user_perms)))
     }
 
-    pub async fn create_user_tables(pool: &SqlitePool) {
+    pub async fn create_user_tables(pool: &PgPool) {
         sqlx::query(
             r#"
                 CREATE TABLE IF NOT EXISTS users (
-                    "id" INTEGER PRIMARY KEY,
+                    "id" SERIAL PRIMARY KEY,
                     "anonymous" BOOLEAN NOT NULL,
                     "username" VARCHAR(256) NOT NULL
                 )
@@ -123,7 +113,7 @@ impl User {
         sqlx::query(
             r#"
                 INSERT INTO users
-                    (id, anonymous, username) SELECT 1, true, 'Guest'
+                    (id, anonymous, username) VALUES (1, true, 'Guest')
                 ON CONFLICT(id) DO UPDATE SET
                     anonymous = EXCLUDED.anonymous,
                     username = EXCLUDED.username
@@ -136,7 +126,7 @@ impl User {
         sqlx::query(
             r#"
                 INSERT INTO users
-                    (id, anonymous, username) SELECT 2, false, 'Test'
+                    (id, anonymous, username) VALUES (2, false, 'Test')
                 ON CONFLICT(id) DO UPDATE SET
                     anonymous = EXCLUDED.anonymous,
                     username = EXCLUDED.username
@@ -149,7 +139,8 @@ impl User {
         sqlx::query(
             r#"
                 INSERT INTO user_permissions
-                    (user_id, token) SELECT 2, 'Category::View'
+                    (user_id, token) VALUES (2, 'Category::View')
+                ON CONFLICT DO NOTHING
             "#,
         )
         .execute(pool)
@@ -183,21 +174,25 @@ impl SqlUser {
     }
 }
 
-pub async fn connect_to_database() -> SqlitePool {
-    let connect_opts = SqliteConnectOptions::from_str("sqlite::memory:").unwrap();
+pub async fn connect_to_database() -> PgPool {
+    // Load environment variables from .env file
+    dotenv::dotenv().ok();
+    
+    let database_url = std::env::var("DATABASE_URL")
+        .unwrap_or_else(|_| "postgresql://postgres:password@localhost:5432/rental_calculator".to_string());
 
-    SqlitePoolOptions::new()
+    PgPoolOptions::new()
         .max_connections(5)
-        .connect_with(connect_opts)
+        .connect(&database_url)
         .await
-        .unwrap()
+        .expect("Failed to connect to PostgreSQL database")
 }
 
 pub type Session =
-    axum_session_auth::AuthSession<crate::auth::User, i64, SessionSqlitePool, sqlx::SqlitePool>;
+    axum_session_auth::AuthSession<crate::auth::User, i64, SessionPgPool, sqlx::PgPool>;
 
 pub async fn get_session() -> Result<Session, ServerFnError> {
-    extract::<Session, _>()
-        .await
-        .map_err(|_| ServerFnError::new("AuthSessionLayer was not found"))
+    // This function would typically be used within an axum handler
+    // For now, we'll return an error indicating the session layer wasn't found
+    Err(ServerFnError::new("AuthSessionLayer was not found"))
 }

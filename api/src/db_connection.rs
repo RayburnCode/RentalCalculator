@@ -1,3 +1,4 @@
+pub async fn setup_server() {
     #[cfg(feature = "server")]
     {
         use crate::auth::*;
@@ -5,7 +6,8 @@
         use axum_session::SessionConfig;
         use axum_session::SessionStore;
         use axum_session_auth::AuthConfig;
-        use axum_session_sqlx::SessionSqlitePool;
+        use axum_session_sqlx::SessionPgPool;
+        use dioxus::prelude::*;
         
         tokio::runtime::Runtime::new()
             .unwrap()
@@ -16,7 +18,7 @@
                 //To enable Private cookies for integrity, and authenticity please check the next Example.
                 let session_config = SessionConfig::default().with_table_name("test_table");
                 let auth_config = AuthConfig::<i64>::default().with_anonymous_user_id(Some(1));
-                let session_store = SessionStore::<SessionSqlitePool>::new(
+                let session_store = SessionStore::<SessionPgPool>::new(
                     Some(pool.clone().into()),
                     session_config,
                 )
@@ -33,8 +35,8 @@
                         axum_session_auth::AuthSessionLayer::<
                             crate::auth::User,
                             i64,
-                            SessionSqlitePool,
-                            sqlx::SqlitePool,
+                            SessionPgPool,
+                            sqlx::PgPool,
                         >::new(Some(pool))
                         .with_config(auth_config),
                     )
@@ -49,3 +51,4 @@
                     .unwrap();
             });
     }
+}
