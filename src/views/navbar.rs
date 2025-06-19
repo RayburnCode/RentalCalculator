@@ -23,8 +23,7 @@ pub fn Navbar() -> Element {
                     // Primary Nav (Center - Desktop)
                     div { class: "hidden md:flex items-center space-x-1",
                         NavLink { to: Route::Home {}, "Home" }
-                        NavLink { to: Route::Blog { id: 1 }, "Blog" }
-                        NavLink { to: Route::PropertyDetails {}, "Calculator" }
+                        NavLink { to: Route::Dashboard {}, "Dashboard" }
                     }
 
                     // Mobile Menu Button (Right side)
@@ -51,8 +50,6 @@ pub fn Navbar() -> Element {
             div { class: format!("md:hidden {}", if is_mobile_menu_open() { "block" } else { "hidden" }),
                 div { class: "px-2 pt-2 pb-3 space-y-1 sm:px-3",
                     MobileNavLink { to: Route::Home {}, "Home" }
-                    MobileNavLink { to: Route::Blog { id: 1 }, "Blog" }
-                    MobileNavLink { to: Route::PropertyDetails {}, "Calculator" }
                 }
             }
         }

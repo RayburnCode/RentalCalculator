@@ -1,8 +1,10 @@
 
 use dioxus::prelude::*;
 
-use views::{Blog, Home, AppLayout, PropertyDetails, };
-
+use views::{Home, AppLayout,NotFound };
+use views::dashboard::{Dashboard, PropertyProfile, AddProperty};
+use views::analysis::{Calculator, Comparison, Expenses, CashFlow};
+use views::learn::{Guides, Glossary};
 mod components;
 mod views;
 
@@ -10,34 +12,79 @@ mod views;
 #[derive(Debug, Clone, Routable, PartialEq)]
 #[rustfmt::skip]
 enum Route {
-    // The layout attribute defines a wrapper for all routes under the layout. Layouts are great for wrapping
     #[layout(AppLayout)]
-        // The route attribute defines the URL pattern that a specific route matches. If that pattern matches the URL,
-        // the component for that route will be rendered. The component name that is rendered defaults to the variant name.
         #[route("/")]
         Home {},
-
-        #[route("/property-details")]
-        PropertyDetails {},
-
-        #[route("/blog/:id")]
-        Blog { id: i32 },
-
-            #[nest("/dashboard")]
-
-            #[route("/")]
-            Dashboard {},
+        
+        // Property Analysis Routes
+        #[route("/calculator")]
+        Calculator {},
+        
+        #[route("/property/:id")]
+        PropertyProfile { id: u32 },
+        
+        #[route("/compare")]
+        Comparison {},
+        
+        // Financial Breakdown Routes
+        #[nest("/finances")]
+            #[route("/expenses")]
+            Expenses {},
             
-            #[route("/:id")]
-            Property { id: i32 },
-
+            #[route("/cashflow")]
+            CashFlow {},
+            
+           // #[route("/tax-benefits")]
+           // TaxBenefits {},
         #[end_nest]
+        
+        // Portfolio Management
+        #[nest("/portfolio")]
+            #[route("/dashboard")]
+            Dashboard {},
 
-        #[end_layout]
-
-        #[route("/not-found")]
-        NotFound { route: Vec<String> },
-
+            #[route("/add-property/:id")]
+            AddProperty { id: u32 },
+            
+         //   #[route("/map-view")]
+         //   PortfolioMap {},
+            
+          //  #[route("/performance")]
+          //  PortfolioPerformance {},
+        #[end_nest]
+        
+        // Market Data
+       // #[route("/market-trends")]
+       // MarketTrends {
+        //    #[query]
+         //   location: Option<String>,
+     //   },
+        
+        // Educational Content
+        #[nest("/learn")]
+            #[route("/guides")]
+            Guides {},
+            
+        //   #[route("/case-studies")]
+        //    CaseStudies {},
+            
+            #[route("/glossary")]
+            Glossary {},
+        #[end_nest]
+        
+        // User Management
+      //  #[route("/settings")]
+     //   UserSettings {},
+        
+      //  #[route("/notifications")]
+      //  Notifications {},
+    #[end_layout]
+    
+ //   #[route("/login")]
+ //   Login {},
+    
+    #[route("/not-found")]
+    NotFound { route: Vec<String> },
 }
 
 
