@@ -1,7 +1,7 @@
 
 use dioxus::prelude::*;
 
-use views::{Home, AppLayout,NotFound };
+use views::{Home, AppLayout,NotFound, TestingServer };
 use views::dashboard::{Dashboard, PropertyProfile, AddProperty};
 use views::analysis::{Calculator, Comparison, Expenses, CashFlow};
 use views::learn::{Guides, Glossary};
@@ -15,6 +15,9 @@ enum Route {
     #[layout(AppLayout)]
         #[route("/")]
         Home {},
+
+        #[route("/testing-server")]
+        TestingServer {},
         
         // Property Analysis Routes
         #[route("/calculator")]
@@ -93,8 +96,15 @@ const FAVICON: Asset = asset!("/assets/favicon.ico");
 const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
 
 fn main() {
+
+
+    // Set the url of the server where server functions are hosted.
+    #[cfg(not(feature = "server"))]
+    dioxus::fullstack::prelude::server_fn::client::set_server_url("http://127.0.0.1:8083");
     dioxus::launch(App);
 }
+
+
 
 #[component]
 fn App() -> Element {
@@ -105,3 +115,5 @@ fn App() -> Element {
         Router::<Route> {}
     }
 }
+
+

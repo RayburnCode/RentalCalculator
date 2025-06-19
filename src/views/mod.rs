@@ -22,3 +22,6 @@ pub use footer::Footer;
 
 mod not_found;
 pub use not_found::NotFound;
+
+mod testing_server;
+pub use testing_server::TestingServer;

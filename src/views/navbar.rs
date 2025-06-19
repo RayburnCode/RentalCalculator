@@ -24,6 +24,8 @@ pub fn Navbar() -> Element {
                     div { class: "hidden md:flex items-center space-x-1",
                         NavLink { to: Route::Home {}, "Home" }
                         NavLink { to: Route::Dashboard {}, "Dashboard" }
+                        NavLink { to: Route::TestingServer {}, "Testing Server" }
+                    
                     }
 
                     // Mobile Menu Button (Right side)
