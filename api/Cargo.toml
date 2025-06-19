@@ -1,61 +1,30 @@
 [package]
 name = "api"
 version = "0.1.0"
-authors = ["RayburnCode <rayburncode@gmail.com>"]
 edition = "2021"
 
 [dependencies]
-dioxus-web = { workspace = true, features = ["hydrate"], optional = true }
-dioxus = { features = ["fullstack"], workspace = true }
-dioxus-fullstack = { workspace = true }
-dioxus-cli-config = { workspace = true, optional = true }
-axum = { workspace = true, optional = true }
-tokio = { workspace = true, features = ["full"], optional = true }
-tower-http = { workspace = true, features = ["auth"], optional = true }
-async-trait = { version = "0.1.71", optional = true }
-sqlx = { version = "0.8.2", features = [
-    "macros",
-    "migrate",
-    "postgres",
-    "sqlite",
-    "_unstable-all-types",
-    "tls-native-tls",
-    "runtime-tokio",
-], optional = true }
-http = { workspace = true, optional = true }
-tower = { workspace = true, optional = true }
+dioxus = { workspace = true, features = ["fullstack"] }
+sqlx = { version = "0.8.6", features = ["runtime-tokio", "postgres", "chrono", "uuid"] }
 
-execute = "0.2.13"
-serde = { workspace = true }
-anyhow = { workspace = true }
+serde = "1.0.219"
+serde_json = "1.0.140"
+chrono = { version = "0.4.41", features = ["serde"] }
+validator = { version = "0.20", features = ["derive"] }
+reqwest = { version = "0.12.19", features = ["json"] }
+tracing = "0.1.41"
+tokio = { version = "1.45.1", features = ["full"] }
+dotenv = "0.15"
+uuid = { version = "1.17.0", features = ["serde", "v4" ] }
+rand = "0.9.1"
+password-hash = "0.5.0"
+rand_core = "0.9.3"
+argon2 = "0.5.3"
+anyhow = "1.0.98"
 
-[dependencies.axum_session]
-workspace = true
-optional = true
 
-[dependencies.axum_session_auth]
-workspace = true
-optional = true
+lazy_static = "1.5.0"
+regex = "1.11.1"
 
-[dependencies.axum_session_sqlx]
-workspace = true
-features = ["sqlite"]
-optional = true
 
-[features]
-default = []
-server = [
-    "dioxus/server",
-    "dep:dioxus-cli-config",
-    "dep:axum",
-    "dep:tokio",
-    "dep:tower-http",
-    "dep:async-trait",
-    "dep:sqlx",
-    "dep:axum_session",
-    "dep:axum_session_auth",
-    "dep:axum_session_sqlx",
-    "dep:http",
-    "dep:tower",
-]
-web = ["dioxus/web", "dep:dioxus-web"]
+#sqlx = { version = "0.8", features = ["postgres", "runtime-tokio-native-tls", ] }

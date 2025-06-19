@@ -1,18 +1,52 @@
 [workspace]
 resolver = "2"
-members = [
-    "desktop",
-    "api",
-]
+members = ["desktop", "api"]
 
 [workspace.dependencies]
-dioxus = { version = "0.6.0" }
+# Shared dependencies
 chrono = "0.4.41"
+serde = { version = "1.0", features = ["derive"] }
+anyhow = "1.0"
+execute = "0.2.13"
 
-# workspace
-api = { path = "api" }
+# Dioxus ecosystem
+dioxus = { version = "0.6.3" }  # Specify version
+dioxus-web = { version = "0.6.3" }
+dioxus-fullstack = { version = "0.6.3" }
+dioxus-cli-config = { version = "0.6.3" }
 
-[profile]
+# Web server dependencies
+axum = { version = "0.8.4"  }
+async-trait = { version = "0.1.71" }
+http = { version = "1.0" }
+tower = { version = "0.5.2" }
+axum_session = { version = "0.16" }
+axum_session_auth = { version = "0.16" }
+axum_session_sqlx = { version = "0.5", features = ["sqlite"] }
+tokio = { version = "1.0", features = ["full"] }
+tower-http = { version = "0.6.6", features = ["auth"] }
+sqlx = { version = "0.8.2", features = [
+    "macros",
+    "migrate",
+    "postgres",
+    "sqlite",
+    "_unstable-all-types",
+    "tls-native-tls",
+    "runtime-tokio",
+] }
+
+[workspace.package]
+# Default versions and features for workspace members
+version = "0.1.0"
+edition = "2021"
+
+[profile.dev]
+opt-level = 0
+debug = true
+
+[profile.release]
+lto = true
+opt-level = 3
 
 [profile.wasm-dev]
 inherits = "dev"
@@ -23,7 +57,3 @@ inherits = "dev"
 
 [profile.android-dev]
 inherits = "dev"
-
-[profile.release]
-lto = true
-opt-level = 3
