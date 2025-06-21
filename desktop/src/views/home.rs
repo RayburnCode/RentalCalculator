@@ -1,5 +1,6 @@
-use crate::common::*;
+use dioxus::prelude::*;
 use crate::Route;
+use dioxus_router::prelude::*;
 
 #[component]
 pub fn Home() -> Element {

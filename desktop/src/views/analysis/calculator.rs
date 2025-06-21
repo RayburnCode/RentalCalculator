@@ -1,4 +1,4 @@
-use crate::common::*;
+use dioxus::prelude::*;
 
 #[component]
 pub fn Calculator() -> Element {

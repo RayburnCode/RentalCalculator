@@ -1,4 +1,6 @@
-use crate::common::*;
+use dioxus::prelude::*;
+use dioxus_router::prelude::*; // Import Link and routing components
+
 use crate::Route;
 use chrono::Datelike;
 

@@ -1,7 +1,7 @@
 
 
 // client/components/layout/app_layout.rs
-use crate::common::*;
+use dioxus::prelude::*;
 use super::Footer;
 use super::Navbar;
 

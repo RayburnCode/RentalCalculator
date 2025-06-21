@@ -1,7 +1,7 @@
 
-mod common;
-use common::*;
-use dioxus_desktop::Config;
+
+use dioxus::prelude::*;
+use dioxus_router::prelude::*;
 
 use views::{Home, AppLayout, NotFound, TestingServer};
 use views::dashboard::{Dashboard, PropertyProfile, AddProperty};
