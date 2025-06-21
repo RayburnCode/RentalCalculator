@@ -76,7 +76,7 @@ pub fn AddProperty(id: u32) -> Element {
             }
 
             div { class: "bg-white p-6 rounded-lg shadow",
-                form { onsubmit: submit_form, prevent_default: "onsubmit",
+                form { onsubmit: submit_form,
 
                     // Address Section
                     div { class: "mb-6",

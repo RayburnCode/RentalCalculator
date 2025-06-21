@@ -7,7 +7,7 @@ use views::{Home, AppLayout, NotFound, TestingServer};
 use views::dashboard::{Dashboard, PropertyProfile, AddProperty};
 use views::analysis::{Calculator, Comparison, Expenses, CashFlow};
 use views::learn::{Guides, Glossary};
-mod components;
+//mod components;
 mod views;
 
 
