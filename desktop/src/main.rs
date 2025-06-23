@@ -100,7 +100,7 @@ const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
 fn main() {
     // Set the url of the server where server functions are hosted.
     #[cfg(not(feature = "server"))]
-    dioxus::fullstack::prelude::server_fn::client::set_server_url("http://127.0.0.1:8083");
+    dioxus::fullstack::prelude::server_fn::client::set_server_url("http://127.0.0.1:8080");
     
     // Launch the desktop app with configuration
     dioxus::launch(app);

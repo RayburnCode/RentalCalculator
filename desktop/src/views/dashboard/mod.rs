@@ -1,8 +1,8 @@
 mod main_page;
-mod individual;
+mod by_id;
 
 pub use main_page::Dashboard;
-pub use individual::PropertyProfile;
+pub use by_id::PropertyProfile;
 
 mod add_property;
 pub use add_property::AddProperty;
